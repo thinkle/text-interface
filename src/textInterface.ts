@@ -33,7 +33,7 @@ const yesWords = ["yes", "yeah", "yep", "yup", "true", "t", "y", "aye", "yup"];
 const noWords = ["no", "n", "false", "f", "nope", "nah"];
 
 export class TextInterface {
-  listener: ((arg0: string) => void) | null = null;
+  private listener: ((arg0: string) => void) | null = null;
   /*
    * the number of milliseconds taken to display
    * text passed to the output method
