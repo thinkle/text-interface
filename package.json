@@ -1,8 +1,9 @@
 {
   "name": "text-interface",
-  "version": "1.0.1",
+  "version": "1.0.6",
   "description": "A simple text interface library for interactive text-based UIs.",
-  "main": "dist/index.js",
+  "main": "dist/text-interface.umd.js",
+  "module" : "dist/text-interface.es.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "dev": "vite --config vite.config.test.js",

@@ -44,6 +44,7 @@ export class TextInterface {
    * The delay before outputting text
    */
   outputDelay: number = 300;
+  shouldStealFocus: boolean = false;
 
   private outputQueue: ["element" | "text", any?, boolean?][];
   private div: HTMLDivElement;
@@ -78,7 +79,7 @@ export class TextInterface {
       ".placeholder"
     ) as HTMLDivElement;
     this.setupInputListener();
-    //this.inputEl.focus();
+    if (this.shouldStealFocus) this.inputEl.focus();
   }
 
   setTitle(text: string) {
@@ -144,7 +145,7 @@ export class TextInterface {
   }
 
   readText(): Promise<string> {
-    this.inputEl.focus();
+    if (this.shouldStealFocus) this.inputEl.focus();
     this.inputWrap.classList.add("active");
     this.inputWrap.scrollIntoView();
     return new Promise((resolve, reject) => {

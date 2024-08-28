@@ -7,7 +7,8 @@ export default defineConfig({
     lib: {
       entry: "./src/index.ts",
       name: "TextInterface",
-      fileName: "textInterface",
+      formats: ["es", "umd"],
+      fileName: (format) => `text-interface.${format}.js`,
     },
     rollupOptions: {
       output: {

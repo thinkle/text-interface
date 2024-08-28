@@ -3,6 +3,7 @@ console.log("Off to a great start!");
 // Example usage of your library for testing
 let app = document.querySelector("#app");
 let ti = new TextInterface(app, "Testing Text Interface");
+ti.shouldStealFocus = true;
 await ti.output("What is your name?");
 let name = await ti.readText();
 ti.output("Hello, " + name);
