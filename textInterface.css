@@ -1,0 +1,99 @@
+/*
+* Library code by Tom Hinkle
+* https://www.tomhinkle.net/proj/text-interface
+* 
+* MIT License
+*
+* Copyright (c) [2024] [Thomas M. Hinkle]
+*
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in all
+* copies or substantial portions of the Software.
+* 
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+* SOFTWARE.
+*/
+/*
+* This code was provided by my teacher:
+*  */
+
+.text-interface {
+  padding-left : 1em;
+  padding-right: 1em;
+  width: 100%;
+  height: 100%;
+  --offwhite : #aaa;
+  --grey : #888;
+  --black: #222;
+  --white: #fefefe;
+  background-color: var(--black);
+  color: var(--white);
+  position: sticky;
+  top: 0;
+  max-height: 90vh;
+  overflow-y: scroll;
+  margin-right: auto;
+  margin-left: auto;
+  max-width: 28em;
+  min-width: 20em;
+  font-family: Roboto, sans-serif;
+}
+.text-interface h2 {
+  position: sticky;
+  top: 0;
+  background-color: var(--black);
+  margin: 0;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  border-bottom: 1px dotted var(--grey);
+}
+.text-interface .input-wrap {
+    border: 1px dotted var(--grey);
+    padding: 1em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    opacity: 0.1;
+}
+.text-interface .input-wrap.active {
+  opacity: 1;
+}
+
+.text-interface .placeholder {
+  font-style: italic;
+  color: var(--offwhite);
+}
+
+.output img {
+  margin: 1em;
+  max-width: 80%;
+  animation : fade-in 500ms;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+    transform-origin: top left;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/**
+*
+* End Code provided by teacher
+*
+**/
