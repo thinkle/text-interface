@@ -1,0 +1,38 @@
+{
+  "name": "text-interface",
+  "version": "1.0.1",
+  "description": "A simple text interface library for interactive text-based UIs.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "dev": "vite --config vite.config.test.js",
+    "build": "vite build --config vite.config.js",
+    "preview": "vite preview --config vite.config.js"
+  },
+  "type": "module",
+  "keywords": [
+    "text-interface",
+    "interactive",
+    "text-ui",
+    "APCSP"
+  ],
+  "author": "Tom Hinkle",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^4.0.0",
+    "vite": "^4.0.0",
+    "vite-plugin-css-injected-by-js": "^3.5.1",
+    "vite-plugin-dts": "^4.0.3"
+  },
+  "files": [
+    "dist/"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:thinkle/text-interface.git"
+  },
+  "bugs": {
+    "url": "https://github.com/thinkle/text-interface/issues"
+  },
+  "homepage": "https://github.com/thinkle/text-interface#readme"
+}
