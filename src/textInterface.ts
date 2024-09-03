@@ -144,6 +144,28 @@ export class TextInterface {
     }
   }
 
+  async readPosNumber(errorMessage = "Please type a positive number"): Promise<number> {
+    let text = await this.readText();
+    let number = Number(text);
+    if (isNaN(number) || number < 0) {
+      this.output(errorMessage);
+      return this.readNumber(errorMessage);
+    } else {
+      return number;
+    }
+  }
+
+  async readNegNumber(errorMessage = "Please type a negative number"): Promise<number> {
+    let text = await this.readText();
+    let number = Number(text);
+    if (isNaN(number) || number > 0) {
+      this.output(errorMessage);
+      return this.readNumber(errorMessage);
+    } else {
+      return number;
+    }
+  }
+
   readText(): Promise<string> {
     if (this.shouldStealFocus) this.inputEl.focus();
     this.inputWrap.classList.add("active");
