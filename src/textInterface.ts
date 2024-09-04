@@ -143,29 +143,40 @@ export class TextInterface {
       return number;
     }
   }
-
-  async readPosNumber(errorMessage = "Please type a positive number"): Promise<number> {
+  
+  async readInteger(errorMessage = "Please type a whole number"): Promise<number> {
     let text = await this.readText();
     let number = Number(text);
-    if (isNaN(number) || number < 0) {
+    if (isNaN(number) || number % 1 != 0) {
       this.output(errorMessage);
-      return this.readNumber(errorMessage);
+      return this.readInteger(errorMessage);
     } else {
       return number;
     }
   }
 
-  async readNegNumber(errorMessage = "Please type a negative number"): Promise<number> {
+  async readIntegerInRange(min, max, errorMessage = `Please type a whole number within the range of ${min} and ${max}`): Promise<number> {
     let text = await this.readText();
     let number = Number(text);
-    if (isNaN(number) || number > 0) {
+    if (isNaN(number) || number % 1 != 0 || number > max || number < min) {
       this.output(errorMessage);
-      return this.readNumber(errorMessage);
+      return this.IntegerInRange(min, max, errorMessage);
     } else {
       return number;
     }
   }
 
+  async readNumberInRange(min, max, errorMessage = `Please type a whole number within the range of ${min} and ${max}`): Promise<number> {
+    let text = await this.readText();
+    let number = Number(text);
+    if (isNaN(number) || number > max || number < min) {
+      this.output(errorMessage);
+      return this.IntegerInRange(min, max, errorMessage);
+    } else {
+      return number;
+    }
+  }
+  
   readText(): Promise<string> {
     if (this.shouldStealFocus) this.inputEl.focus();
     this.inputWrap.classList.add("active");
