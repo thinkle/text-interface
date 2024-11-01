@@ -1,6 +1,6 @@
 {
   "name": "text-interface",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "A simple text interface library for interactive text-based UIs.",
   "main": "dist/text-interface.umd.js",
   "module": "dist/text-interface.es.js",
