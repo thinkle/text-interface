@@ -155,23 +155,25 @@ export class TextInterface {
     }
   }
 
-  async readIntegerInRange(min, max, errorMessage = `Please type a whole number within the range of ${min} and ${max}`): Promise<number> {
+  async readIntegerInRange(min : number, max : number, errorMessage = `Please type a whole number within the range of ${min} and ${max}`): Promise<number> {
     let text = await this.readText();
     let number = Number(text);
     if (isNaN(number) || number % 1 != 0 || number > max || number < min) {
       this.output(errorMessage);
-      return this.IntegerInRange(min, max, errorMessage);
+      let number = await this.readIntegerInRange(min, max, errorMessage);
+      return number;
     } else {
       return number;
     }
   }
 
-  async readNumberInRange(min, max, errorMessage = `Please type a whole number within the range of ${min} and ${max}`): Promise<number> {
+  async readNumberInRange(min : number, max : number, errorMessage = `Please type a whole number within the range of ${min} and ${max}`): Promise<number> {
     let text = await this.readText();
     let number = Number(text);
     if (isNaN(number) || number > max || number < min) {
       this.output(errorMessage);
-      return this.IntegerInRange(min, max, errorMessage);
+      let number = await this.readNumberInRange(min, max, errorMessage);
+      return number;
     } else {
       return number;
     }
@@ -184,6 +186,36 @@ export class TextInterface {
     return new Promise((resolve, reject) => {
       this.listener = resolve;
     });
+  }
+
+  prompt (prompt : string): Promise<string> {
+    this.output(prompt);
+    return this.readText();
+  }
+
+  promptYesOrNo (prompt: string) : Promise<boolean> {
+    this.output(prompt);
+    return this.readYesOrNo();
+  }
+
+  promptNumber (prompt: string, errorMessage : string) : Promise<number> {
+    this.output(prompt);
+    return this.readNumber(errorMessage);
+  }
+
+  promptInteger (prompt: string, errorMessage : string) : Promise<number> {
+    this.output(prompt);
+    return this.readInteger(errorMessage);
+  }
+
+  promptNumberInRange (prompt: string, min : number, max : number, errorMessage : string ) : Promise<number> {
+    this.output(prompt);
+    return this.readNumberInRange(min, max, errorMessage);
+  }
+
+  promptIntegerInRange (prompt: string, min: number, max : number, errorMessage : string) : Promise<number> {
+    this.output(prompt);
+    return this.readIntegerInRange(min, max, errorMessage);
   }
 
   showElement(element: HTMLElement) {
