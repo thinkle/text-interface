@@ -53,7 +53,11 @@ export class TextInterface {
   private placeholderEl: HTMLDivElement;
   private inputWrap: HTMLDivElement;
   private outputting!: boolean;
-
+  private scrollOptions : ScrollIntoViewOptions = {
+    behavior: "smooth",
+    block: "center",
+    inline: "nearest"
+  }
   constructor(element = document.body, title = "Text Interface") {
     this.outputQueue = [];
     this.div = document.createElement("div") as HTMLDivElement;
@@ -88,6 +92,10 @@ export class TextInterface {
 
   clear() {
     this.outputEl.innerHTML = "";
+  }
+
+  setScrollOptions(options: ScrollIntoViewOptions) {
+    this.scrollOptions = options;
   }
 
   async readChoice(
@@ -182,7 +190,9 @@ export class TextInterface {
   readText(): Promise<string> {
     if (this.shouldStealFocus) this.inputEl.focus();
     this.inputWrap.classList.add("active");
-    this.inputWrap.scrollIntoView();
+    this.inputWrap.scrollIntoView(
+      this.scrollOptions
+    );
     return new Promise((resolve, reject) => {
       this.listener = resolve;
     });
@@ -224,7 +234,7 @@ export class TextInterface {
     } else {
       this.outputting = true;
       this.outputEl.appendChild(element);
-      element.scrollIntoView({ behavior: "smooth" });
+      element.scrollIntoView(this.scrollOptions);
       setTimeout(() => {
         this.outputting = false;
         this.doNextOutput();
@@ -262,7 +272,13 @@ export class TextInterface {
         this.outputting = true;
         let delay = this.outputAnimationLength / text.length;
         const animateOutput = () => {
-          output.textContent += text[0] || "";
+         if (text[0] === "\n") {
+           const br = document.createElement("br");
+           output.appendChild(br);
+         } else {
+           const textNode = document.createTextNode(text[0] || "");
+           output.appendChild(textNode);
+         }
           text = text.substring(1);
           if (text.length) {
             setTimeout(animateOutput, delay);
@@ -274,7 +290,7 @@ export class TextInterface {
         setTimeout(animateOutput, this.outputDelay);
       }
       this.outputEl.appendChild(output);
-      output.scrollIntoView({ behavior: "smooth" });
+      output.scrollIntoView(this.scrollOptions);
     }
   }
 
@@ -294,8 +310,9 @@ export class TextInterface {
   }
 
   private setupInputListener() {
-    this.inputEl.addEventListener("keypress", (event) => {
-      let isEnter = event.code == "Enter";
+    this.inputEl.addEventListener("keyup", (event) => {
+      
+      let isEnter = (event.code == "Enter" || event.key == 'Enter');
       if (isEnter) {
         let input = this!.inputEl!.textContent!.replace(/\n$/, "");
         this.output(input, true);
