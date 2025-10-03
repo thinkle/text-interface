@@ -1,38 +1,27 @@
-import { TextInterface } from "../src/index";
+import { TextInterface, themes, applyTheme } from "../src/index";
 console.log("Off to a great start!");
 // Example usage of your library for testing
+
 let app = document.querySelector("#app");
-let ti = new TextInterface(app, "Testing Text Interface");
+let ti = new TextInterface(app, "Testing Text Interface", "Say something", "");
+ti.hideTitle();
+
 
 ti.shouldStealFocus = true;
-ti.showImage(
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Taj_Mahal_%28Edited%29.jpeg/2560px-Taj_Mahal_%28Edited%29.jpeg"
-);
-ti.output(
-  `
-  This
-  is
-  a 
-  rather long output
-  that is designed
-  to make it so I can
-  test
-  the
-  scroll
-  function
-  of 
-  this thing.`
-)
-let name = await ti.prompt("What is your name?");
-let num = await ti.promptIntegerInRange("Enter a number between 1 and 10!", 1, 10);
-
-ti.output("Hello, " + name);
-ti.output(`${num+1} is my favorite number - so close!`);
-let choice = await ti.readChoice([
-  "Eat an apple",
-  "Eat a cookie",
-  "Eat a burrito",
-]);
+/* M */
+ti.outputAnimationLength = 1nord00;
+let keepTheming = true;
+while (keepTheming) {
+  let themeChoice = await ti.prompt("Choose a theme");
+  if (!themes[themeChoice]) {
+    themeChoice = await ti.readChoice(Object.keys(themes), "Pick a theme: ");
+  }
+  applyTheme(themes[themeChoice]);
+  let prompt = await ti.prompt("Choose a prompt character (or nothing):");
+  ti.setPrompt(prompt);
+  await ti.output("Well this is certainly fun, isn't it!");
+}
+ti.outputAnimationLength = 500;
 ti.output('You chose: "' + choice + '"');
 if (choice.includes("burrito")) {
   ti.output("Good choice!");
@@ -53,4 +42,5 @@ while (keepGoing) {
     ).join("")
   ).join("\n"));
   keepGoing = await ti.promptYesOrNo("Do you want to keep going?");
+
 }

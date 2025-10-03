@@ -29,47 +29,63 @@
 .text-interface {
   padding-left: 1em;
   padding-right: 1em;
+  padding-bottom: 1em;
   width: 100%;
   height: 100%;
-  --offwhite: var(--ti-offwhite, #aaa); 
-  --grey: var(--ti-grey, #888); 
-  --black: var(--ti-black, #222); 
-  --white: var(--ti-white, #fefefe); 
-  --font: var(--ti-font, Roboto, sans-serif); 
-  --output-font: var(--ti-output-font, monospace); 
-  background-color: var(--black, #222);
-  color: var(--white, #fefefe);
+  --offwhite: var(--ti-offwhite, #aaa);
+  --grey: var(--ti-grey, #888);
+  --black: var(--ti-black, #222);
+  --white: var(--ti-white, #fefefe);
+  --font: var(--ti-font, Roboto, sans-serif);
+  --output-font: var(--ti-output-font, monospace);
+  --echo-font: var(--ti-echo-font, var(--output-font, monospace));
+  --input-color: var(--ti-input-color, var(--offwhite, #aaa));
+  --echo-color: var(--ti-echo-color, var(--offwhite, #aaa));
+  --caret-color: var(--ti-caret-color, var(--white, #fefefe));
+  --custom-caret: var(--ti-custom-caret, "|");
+  --custom-caret-shape: var(--ti-custom-caret-shape, block);
+  --focus-outline: var(--ti-focus-outline, -webkit-focus-ring-color auto 1px);
+  --focus-border-bottom: var(--ti-focus-border-bottom, none);
+  --input-padding: var(--ti-input-padding, 0);
+  --max-height: var(--ti-max-height, 90vh);
+  --max-width: var(--ti-max-width, 58em);
+  --min-width: var(--ti-min-width, 20em);
+  --font-size: var(--ti-font-size, 18px);
+  --scroll-track-color: var(--ti-scroll-track-color, var(--black, #222));
+  --scroll-thumb-color: var(--ti-scroll-thumb-color, var(--grey, #888));
+  --scroll-thumb-hover-color: var(--ti-scroll-thumb-hover-color, #555);
+  --scroll-thumb-active-color: var(--ti-scroll-thumb-active-color, #333);
+  --output-spacing: var(--ti-output-spacing, 0.5em);
+  background-color: var(--black);
+  color: var(--white);
   position: sticky;
   top: 0;
-  max-height: var(--ti-max-height, 90vh);
+  max-height: var(--max-height);
   overflow-y: scroll;
   margin-right: auto;
   margin-left: auto;
-  max-width: var(--ti-max-width, 28em);
-  min-width: var(--ti-min-width, 20em);
-  font-family: var(--font, Roboto, sans-serif);
-  font-size: var(--ti-font-size, 1em);
+  max-width: var(--max-width);
+  min-width: var(--min-width);
+  font-family: var(--font);
+  font-size: var(--font-size);
 }
 
 /* Header styles */
 .text-interface h2 {
   position: sticky;
   top: 0;
-  background-color: var(--black, #222);
+  background-color: var(--black);
   margin: 0;
   padding-top: 1em;
   padding-bottom: 1em;
-  border-bottom: 1px dotted var(--grey, #888);
+  border-bottom: 1px dotted var(--grey);
 }
 
 /* Input wrapper styles */
 .text-interface .input-wrap {
-  border: 1px dotted var(--grey, #888);
-  padding: 1em;
-  margin-top: 1em;
-  margin-bottom: 1em;
+  padding: var(--input-padding);
   opacity: 0.1;
-  font-family: var(--output-font, monospace);
+  font-family: var(--output-font);
 }
 
 /* Active input wrapper */
@@ -77,10 +93,52 @@
   opacity: 1;
 }
 
+/* Focus outline */
+.text-interface .input:focus-visible {
+  outline: var(--focus-outline);
+  border-bottom: var(--focus-border-bottom);
+}
+
 /* Placeholder text */
 .text-interface .placeholder {
   font-style: italic;
-  color: var(--offwhite, #aaa);
+  color: var(--offwhite);
+}
+
+/* Actual input */
+.text-interface .input-wrap .input {
+  caret-color: transparent;
+  min-width: var(--min-input-width, var(--min-width, 20em));
+}
+
+/* Hide auto-inserted br tags in input */
+.text-interface .input-wrap .input br {
+  display: none;
+}
+
+.text-interface .input-wrap .input::after {
+  content: var(--custom-caret);
+  color: var(--caret-color);
+  animation: blink 1s steps(1) infinite;
+}
+.text-interface .input-wrap.has-text .input::after {
+  content: "";
+  animation: none;
+}
+.text-interface .input-wrap.has-text .input {
+  caret-color: inherit;
+  caret-shape: var(--custom-caret-shape);
+}
+
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  50.01%,
+  100% {
+    opacity: 0;
+  }
 }
 
 /* Output styles */
@@ -91,13 +149,33 @@
 }
 
 .output {
-  font-family: var(--output-font, monospace);
+  font-family: var(--output-font);
+  margin-bottom: var(--output-spacing);
 }
 
 /* Echo output */
 .output.echo {
-  color: var(--ti-echo-color, var(--offwhite, #aaa));
-  font-family: var(--echo-font, var(--output-font, monospace));
+  color: var(--echo-color);
+  font-family: var(--echo-font);
+}
+.input-wrap {
+  position: relative;
+}
+.prompt-wrap {
+  margin-top: var(--input-padding-top, 8px);
+  margin-bottom: var(--input-padding-bottom, 1em);
+}
+.input-wrap .input,
+.input-wrap .placeholder {
+  position: absolute;
+}
+.input-wrap.has-text .placeholder {
+  display: none;
+}
+
+.input {
+  color: var(--input-color);
+  font-family: var(--echo-font);
 }
 
 /* Keyframes for fade-in animation */
@@ -119,20 +197,46 @@
 }
 
 .text-interface::-webkit-scrollbar-track {
-  background: var(--ti-scroll-track-color, var(--black, #222));
+  background: var(--scroll-track-color);
   border-radius: 10px;
 }
 
 .text-interface::-webkit-scrollbar-thumb {
-  background-color: var(--ti-scroll-thumb-color, var(--grey, #888));
+  background-color: var(--scroll-thumb-color);
   border-radius: 10px;
-  border: 2px solid var(--black, #222);
+  border: 2px solid var(--black);
 }
 
 .text-interface::-webkit-scrollbar-thumb:hover {
-  background-color: var(--ti-scroll-thumb-hover-color, #555);
+  background-color: var(--scroll-thumb-hover-color);
 }
 
 .text-interface::-webkit-scrollbar-thumb:active {
-  background-color: var(--ti-scroll-thumb-active-color, #333);
+  background-color: var(--scroll-thumb-active-color);
+}
+.prompt-wrap {
+  display: flex;
+  gap: 0.5em;
+  align-items: start;
+}
+.prompt-wrap.no-prompt {
+  gap: 0;
+}
+.prompt-wrap.no-prompt .prompt {
+  display: none;
+}
+
+/* Hide prompt by default */
+.prompt {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+/* Show prompt when ready for input */
+.text-interface.ready .prompt {
+  opacity: 1;
+}
+
+.input-wrap {
+  flex: 1;
 }
