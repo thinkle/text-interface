@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Personality Quiz – Text Interface Demo</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module">
+      // ============================================================
+      // Personality Quiz: "What Kind of Coder Are You?"
+      // A fun quiz written by a beginning APCSP student.
+      // Style: top-level variables, if/else statements, no functions.
+      // Theme: Dracula
+      // ============================================================
+
+      import {
+        TextInterface,
+        applyTheme,
+        themes,
+      } from "./dist/text-interface.es.js";
+
+      // --- Set up the interface ---
+      applyTheme(themes.dracula);
+      let app = document.getElementById("app");
+      let ti = new TextInterface(
+        app,
+        "🔮 What Kind of Coder Are You?",
+        "Choose an option...",
+        ""
+      );
+      ti.outputAnimationLength = 500;
+      ti.shouldStealFocus = true;
+      ti.setPrompt("» ");
+
+      // --- Score trackers ---
+      let artistScore = 0;
+      let builderScore = 0;
+      let detectiveScore = 0;
+      let explorerScore = 0;
+
+      // --- Welcome ---
+      await ti.output("Welcome to the Personality Quiz!");
+      await ti.output("Answer 5 questions to find out what kind of coder you are.");
+      await ti.output("");
+
+      // --- Question 1 ---
+      await ti.output("Question 1 of 5");
+      let answer1 = await ti.readChoice(
+        [
+          "Make it look beautiful",
+          "Make it run perfectly",
+          "Find and fix a tricky bug",
+          "Try out a brand new language",
+        ],
+        "When you start a project, what excites you most?"
+      );
+
+      if (answer1 === "Make it look beautiful") {
+        artistScore = artistScore + 1;
+      }
+      if (answer1 === "Make it run perfectly") {
+        builderScore = builderScore + 1;
+      }
+      if (answer1 === "Find and fix a tricky bug") {
+        detectiveScore = detectiveScore + 1;
+      }
+      if (answer1 === "Try out a brand new language") {
+        explorerScore = explorerScore + 1;
+      }
+
+      // --- Question 2 ---
+      await ti.output("");
+      await ti.output("Question 2 of 5");
+      let answer2 = await ti.readChoice(
+        [
+          "A sketchbook",
+          "A toolkit",
+          "A magnifying glass",
+          "A compass",
+        ],
+        "Which item would you bring to a desert island?"
+      );
+
+      if (answer2 === "A sketchbook") {
+        artistScore = artistScore + 1;
+      }
+      if (answer2 === "A toolkit") {
+        builderScore = builderScore + 1;
+      }
+      if (answer2 === "A magnifying glass") {
+        detectiveScore = detectiveScore + 1;
+      }
+      if (answer2 === "A compass") {
+        explorerScore = explorerScore + 1;
+      }
+
+      // --- Question 3 ---
+      await ti.output("");
+      await ti.output("Question 3 of 5");
+      let answer3 = await ti.readChoice(
+        [
+          "Colors, fonts, and layouts",
+          "Making things work behind the scenes",
+          "Why something broke",
+          "What happens if I try this...",
+        ],
+        "What do you think about most when coding?"
+      );
+
+      if (answer3 === "Colors, fonts, and layouts") {
+        artistScore = artistScore + 1;
+      }
+      if (answer3 === "Making things work behind the scenes") {
+        builderScore = builderScore + 1;
+      }
+      if (answer3 === "Why something broke") {
+        detectiveScore = detectiveScore + 1;
+      }
+      if (answer3 === "What happens if I try this...") {
+        explorerScore = explorerScore + 1;
+      }
+
+      // --- Question 4 ---
+      await ti.output("");
+      await ti.output("Question 4 of 5");
+      let answer4 = await ti.readChoice(
+        [
+          "Design a cool website",
+          "Build a useful app",
+          "Solve a puzzle or challenge",
+          "Learn something completely new",
+        ],
+        "On a free Saturday, you would rather..."
+      );
+
+      if (answer4 === "Design a cool website") {
+        artistScore = artistScore + 1;
+      }
+      if (answer4 === "Build a useful app") {
+        builderScore = builderScore + 1;
+      }
+      if (answer4 === "Solve a puzzle or challenge") {
+        detectiveScore = detectiveScore + 1;
+      }
+      if (answer4 === "Learn something completely new") {
+        explorerScore = explorerScore + 1;
+      }
+
+      // --- Question 5 ---
+      await ti.output("");
+      await ti.output("Question 5 of 5");
+      let answer5 = await ti.readChoice(
+        [
+          "\"It needs to LOOK amazing!\"",
+          "\"It needs to WORK perfectly!\"",
+          "\"Wait, there's a bug here...\"",
+          "\"What if we tried it THIS way?\"",
+        ],
+        "Which phrase sounds most like you?"
+      );
+
+      if (answer5 === "\"It needs to LOOK amazing!\"") {
+        artistScore = artistScore + 1;
+      }
+      if (answer5 === "\"It needs to WORK perfectly!\"") {
+        builderScore = builderScore + 1;
+      }
+      if (answer5 === "\"Wait, there's a bug here...\"") {
+        detectiveScore = detectiveScore + 1;
+      }
+      if (answer5 === "\"What if we tried it THIS way?\"") {
+        explorerScore = explorerScore + 1;
+      }
+
+      // --- Determine result ---
+      await ti.output("");
+      await ti.output("Calculating your result...");
+      await ti.output("");
+
+      // Find the highest score
+      let highestScore = artistScore;
+      if (builderScore > highestScore) {
+        highestScore = builderScore;
+      }
+      if (detectiveScore > highestScore) {
+        highestScore = detectiveScore;
+      }
+      if (explorerScore > highestScore) {
+        highestScore = explorerScore;
+      }
+
+      // Show the result
+      if (artistScore === highestScore) {
+        await ti.output("🎨 You are... THE ARTIST!");
+        await ti.output(
+          "You care about how things look and feel. You love CSS, design, " +
+          "and making beautiful user interfaces. Your code is as pretty " +
+          "as your projects!"
+        );
+      } else if (builderScore === highestScore) {
+        await ti.output("🔧 You are... THE BUILDER!");
+        await ti.output(
+          "You love making things that work. You are all about logic, " +
+          "structure, and building solid programs. If it ain't broke, you " +
+          "probably built it!"
+        );
+      } else if (detectiveScore === highestScore) {
+        await ti.output("🔍 You are... THE DETECTIVE!");
+        await ti.output(
+          "You have an eye for detail and love solving mysteries in code. " +
+          "Debugging is your superpower. No bug can hide from you!"
+        );
+      } else {
+        await ti.output("🧭 You are... THE EXPLORER!");
+        await ti.output(
+          "You are curious and always want to try new things. You love " +
+          "experimenting with new languages, tools, and ideas. The unknown " +
+          "is your playground!"
+        );
+      }
+
+      // --- Show scores ---
+      await ti.output("");
+      await ti.output("Your scores:");
+      await ti.output("  🎨 Artist:    " + artistScore + " / 5");
+      await ti.output("  🔧 Builder:   " + builderScore + " / 5");
+      await ti.output("  🔍 Detective: " + detectiveScore + " / 5");
+      await ti.output("  🧭 Explorer:  " + explorerScore + " / 5");
+
+      // --- Play again ---
+      await ti.output("");
+      let playAgain = await ti.promptYesOrNo("Want to take the quiz again?");
+      if (playAgain) {
+        location.reload();
+      } else {
+        await ti.output("Thanks for playing! Happy coding! 💻");
+      }
+    </script>
+  </body>
+</html>

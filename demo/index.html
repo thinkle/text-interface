@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Text Interface – Demos &amp; Introduction</title>
+    <style>
+      :root {
+        --accent: #00d4aa;
+        --bg: #1a1a1a;
+        --fg: #e0e0e0;
+        --muted: #888;
+        --card-bg: #242424;
+        --card-border: #333;
+      }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        background: var(--bg);
+        color: var(--fg);
+        line-height: 1.6;
+        padding: 2rem 1rem;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.25rem;
+      }
+      h1 span { color: var(--accent); }
+      .tagline {
+        color: var(--muted);
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+      }
+      h2 {
+        font-size: 1.5rem;
+        margin-top: 2.5rem;
+        margin-bottom: 1rem;
+        border-bottom: 2px solid var(--card-border);
+        padding-bottom: 0.5rem;
+      }
+      p { margin-bottom: 1rem; }
+      a { color: var(--accent); text-decoration: none; }
+      a:hover { text-decoration: underline; }
+      code {
+        background: var(--card-bg);
+        padding: 0.15em 0.4em;
+        border-radius: 4px;
+        font-size: 0.9em;
+      }
+      pre {
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
+        border-radius: 8px;
+        padding: 1rem 1.25rem;
+        overflow-x: auto;
+        margin-bottom: 1.5rem;
+        font-size: 0.9rem;
+        line-height: 1.5;
+      }
+      pre code {
+        background: none;
+        padding: 0;
+      }
+      .cards {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+      @media (min-width: 600px) {
+        .cards { grid-template-columns: 1fr 1fr; }
+      }
+      .card {
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
+        border-radius: 8px;
+        padding: 1.25rem;
+        transition: border-color 0.2s;
+      }
+      .card:hover { border-color: var(--accent); }
+      .card h3 { margin-bottom: 0.5rem; font-size: 1.15rem; }
+      .card p { color: var(--muted); font-size: 0.95rem; margin-bottom: 0.75rem; }
+      .badge {
+        display: inline-block;
+        font-size: 0.75rem;
+        padding: 0.15em 0.5em;
+        border-radius: 4px;
+        background: #333;
+        color: var(--accent);
+        margin-right: 0.4rem;
+      }
+      .card .play {
+        display: inline-block;
+        margin-top: 0.75rem;
+        padding: 0.4rem 1rem;
+        border: 1px solid var(--accent);
+        border-radius: 6px;
+        color: var(--accent);
+        font-weight: 500;
+        transition: background 0.2s, color 0.2s;
+      }
+      .card .play:hover {
+        background: var(--accent);
+        color: var(--bg);
+        text-decoration: none;
+      }
+      footer {
+        margin-top: 3rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--card-border);
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1><span>Text Interface</span> Demos</h1>
+      <p class="tagline">A beginner-friendly JavaScript library for interactive text-based programs in the browser.</p>
+
+      <h2>About the Library</h2>
+      <p>
+        The <strong>Text Interface</strong> library gives you a simple way to
+        create interactive, terminal-style programs right in the browser. It is
+        perfect for beginning programmers learning JavaScript&mdash;you can read
+        input, display output, and build text-based games without worrying about
+        HTML or complex UI.
+      </p>
+      <pre><code>import { TextInterface } from "text-interface";
+
+const ti = new TextInterface();
+await ti.output("What is your name?");
+let name = await ti.readText();
+await ti.output("Hello, " + name + "!");</code></pre>
+
+      <h2>Demo Games</h2>
+      <p>
+        Each demo below is written in a simple, approachable style&mdash;the
+        kind of code a beginning APCSP student might write. They showcase
+        different features of the library such as themes, input types, and
+        customization.
+      </p>
+
+      <div class="cards">
+        <div class="card">
+          <h3>🧮 Math Quiz</h3>
+          <p>Answer random arithmetic questions and see your score. A simple
+          game using <code>while</code> loops and <code>if</code> statements
+          &mdash; no functions needed.</p>
+          <span class="badge">Beginner</span>
+          <span class="badge">Green Terminal theme</span>
+          <br />
+          <a class="play" href="math-quiz.html">Play →</a>
+        </div>
+
+        <div class="card">
+          <h3>🔮 Personality Quiz</h3>
+          <p>Answer fun multiple-choice questions to find out what kind of
+          coder you are! Uses simple scoring with <code>if</code> statements.</p>
+          <span class="badge">Beginner</span>
+          <span class="badge">Dracula theme</span>
+          <br />
+          <a class="play" href="personality-quiz.html">Play →</a>
+        </div>
+
+        <div class="card">
+          <h3>🤖 Eliza Chatbot</h3>
+          <p>Talk to a simple chatbot inspired by the classic ELIZA program.
+          Uses functions for pattern matching and response generation.</p>
+          <span class="badge">Intermediate</span>
+          <span class="badge">VS Code Dark theme</span>
+          <br />
+          <a class="play" href="eliza-bot.html">Play →</a>
+        </div>
+      </div>
+
+      <h2>Getting Started</h2>
+      <p>Install the library with npm:</p>
+      <pre><code>npm install text-interface</code></pre>
+      <p>Or add a script tag to any HTML page:</p>
+      <pre><code>&lt;script type="module"&gt;
+  import { TextInterface } from
+    "https://cdn.jsdelivr.net/npm/text-interface@latest/dist/text-interface.es.js";
+  const ti = new TextInterface();
+  let name = await ti.prompt("What is your name?");
+  await ti.output("Hello, " + name + "!");
+&lt;/script&gt;</code></pre>
+
+      <h2>Themes &amp; Customization</h2>
+      <p>
+        The library ships with <strong>14 built-in themes</strong> you can swap
+        at runtime. Each demo above uses a different theme. You can also create
+        your own by setting CSS custom properties.
+      </p>
+      <pre><code>import { applyTheme, themes } from "text-interface";
+applyTheme(themes.dracula);   // or greenTerminal, typewriter, nord…</code></pre>
+
+      <p>
+        See the full documentation on
+        <a href="https://github.com/thinkle/text-interface#readme">GitHub</a>.
+      </p>
+
+      <footer>
+        Text Interface &copy; Tom Hinkle &middot; MIT License &middot;
+        <a href="https://github.com/thinkle/text-interface">GitHub</a>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Math Quiz – Text Interface Demo</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module">
+      // ============================================================
+      // Math Quiz Game
+      // A simple quiz written by a beginning APCSP student.
+      // Style: top-level variables, while loops, if statements.
+      // Theme: Green Terminal
+      // ============================================================
+
+      import {
+        TextInterface,
+        applyTheme,
+        themes,
+      } from "./dist/text-interface.es.js";
+
+      // --- Set up the interface ---
+      applyTheme(themes.greenTerminal);
+      let app = document.getElementById("app");
+      let ti = new TextInterface(app, "🧮 Math Quiz", "Type your answer...", "> ");
+      ti.outputAnimationLength = 400;
+      ti.shouldStealFocus = true;
+
+      // --- Game variables ---
+      let score = 0;
+      let questionNumber = 1;
+      let totalQuestions = 5;
+
+      // --- Welcome message ---
+      await ti.output("Welcome to the Math Quiz!");
+      await ti.output("You will get " + totalQuestions + " random math questions.");
+      await ti.output("Let's see how many you can get right!\n");
+
+      // --- Main game loop ---
+      while (questionNumber <= totalQuestions) {
+        // Pick two random numbers between 1 and 20
+        let a = Math.floor(Math.random() * 20) + 1;
+        let b = Math.floor(Math.random() * 20) + 1;
+
+        // Pick a random operation
+        let operations = ["+", "-", "*"];
+        let op = operations[Math.floor(Math.random() * operations.length)];
+
+        // Calculate the correct answer
+        let correctAnswer = 0;
+        if (op === "+") {
+          correctAnswer = a + b;
+        }
+        if (op === "-") {
+          correctAnswer = a - b;
+        }
+        if (op === "*") {
+          correctAnswer = a * b;
+        }
+
+        // Ask the question
+        await ti.output("Question " + questionNumber + " of " + totalQuestions);
+        let userAnswer = await ti.promptNumber(
+          "What is " + a + " " + op + " " + b + "?",
+          "Please type a number!"
+        );
+
+        // Check the answer
+        if (userAnswer === correctAnswer) {
+          await ti.output("✅ Correct! Nice job!");
+          score = score + 1;
+        } else {
+          await ti.output(
+            "❌ Not quite. The answer was " + correctAnswer + "."
+          );
+        }
+
+        await ti.output(""); // blank line
+        questionNumber = questionNumber + 1;
+      }
+
+      // --- Show final score ---
+      await ti.output("============================");
+      await ti.output(
+        "You got " + score + " out of " + totalQuestions + " correct!"
+      );
+
+      if (score === totalQuestions) {
+        await ti.output("🌟 Perfect score! Amazing!");
+      } else if (score >= totalQuestions - 1) {
+        await ti.output("🎉 Great job! Almost perfect!");
+      } else if (score >= Math.floor(totalQuestions / 2)) {
+        await ti.output("👍 Not bad! Keep practicing!");
+      } else {
+        await ti.output("💪 Keep trying, you'll get better!");
+      }
+
+      // --- Play again? ---
+      let playAgain = await ti.promptYesOrNo("Do you want to play again?");
+      if (playAgain) {
+        location.reload();
+      } else {
+        await ti.output("Thanks for playing! Goodbye! 👋");
+      }
+    </script>
+  </body>
+</html>
