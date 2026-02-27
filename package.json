@@ -7,6 +7,7 @@
   "types": "dist/text-interface.d.ts",
   "scripts": {
     "dev": "vite --config vite.config.test.js",
+    "demo": "npm run build && vite --open /demo/index.html --port 5173",
     "build": "vite build --config vite.config.js",
     "preview": "vite preview --config vite.config.js",
     "test": "vitest run",

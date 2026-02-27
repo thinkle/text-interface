@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Eliza Chatbot – Text Interface Demo</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css"
+    />
+    <style>
+      body {
+        background: var(--ti-black, #222);
+        color: var(--ti-white, #fefefe);
+        margin: 0;
+        min-height: 100vh;
+      }
+      .source-toggle {
+        position: fixed;
+        top: 12px;
+        right: 12px;
+        z-index: 1000;
+        background: rgba(128, 128, 128, 0.15);
+        border: 1px solid rgba(128, 128, 128, 0.25);
+        color: var(--ti-white, #fefefe);
+        padding: 6px 14px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-family: system-ui, sans-serif;
+        backdrop-filter: blur(8px);
+        transition: all 0.2s;
+      }
+      .source-toggle:hover {
+        background: rgba(128, 128, 128, 0.3);
+      }
+      .source-panel {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 999;
+        background: rgba(0, 0, 0, 0.92);
+        backdrop-filter: blur(6px);
+        overflow: auto;
+        padding: 56px 1rem 2rem;
+      }
+      .source-panel.open {
+        display: block;
+      }
+      .source-panel pre {
+        max-width: 820px;
+        margin: 0 auto;
+        border-radius: 10px;
+      }
+      .source-panel pre code {
+        font-size: 14px !important;
+        line-height: 1.5;
+      }
+      .back-link {
+        position: fixed;
+        bottom: 12px;
+        left: 12px;
+        z-index: 1001;
+        color: var(--ti-white, #fefefe);
+        font-size: 13px;
+        font-family: system-ui, sans-serif;
+        text-decoration: none;
+        opacity: 0.5;
+        transition: opacity 0.2s;
+      }
+      .back-link:hover {
+        opacity: 1;
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" id="game-source">
+      // ============================================================
+      // Eliza-Style Chatbot
+      // A simple chatbot that responds to keywords in your messages.
+      // Style: uses functions for pattern matching and responses.
+      // Theme: VS Code Dark
+      // ============================================================
+
+      import {
+        TextInterface,
+        applyTheme,
+        themes,
+      } from "../dist/text-interface.es.js";
+
+      // --- Set up the interface ---
+      applyTheme(themes.vsCodeDark);
+      let app = document.getElementById("app");
+      let ti = new TextInterface(
+        app,
+        "🤖 Eliza Chatbot",
+        "Say something...",
+        "",
+      );
+      ti.outputAnimationLength = 600;
+      ti.shouldStealFocus = true;
+      ti.setPrompt("you: ");
+
+      // ============================================================
+      // Helper functions
+      // ============================================================
+
+      // Check if the user's message contains a word (case-insensitive)
+      function containsWord(message, word) {
+        let lower = message.toLowerCase();
+        return lower.includes(word.toLowerCase());
+      }
+
+      // Pick a random item from a list
+      function pickRandom(list) {
+        let index = Math.floor(Math.random() * list.length);
+        return list[index];
+      }
+
+      // Try to extract what comes after a keyword in the message
+      function getAfterKeyword(message, keyword) {
+        let lower = message.toLowerCase();
+        let position = lower.indexOf(keyword.toLowerCase());
+        if (position === -1) {
+          return "";
+        }
+        let after = message.substring(position + keyword.length).trim();
+        // Remove trailing punctuation
+        if (after.endsWith(".") || after.endsWith("!") || after.endsWith("?")) {
+          after = after.substring(0, after.length - 1);
+        }
+        return after;
+      }
+
+      // ============================================================
+      // Response logic
+      // Each function checks for a pattern and returns a response,
+      // or returns "" if the pattern doesn't match.
+      // ============================================================
+
+      function checkGreeting(message) {
+        if (
+          containsWord(message, "hello") ||
+          containsWord(message, "hi") ||
+          containsWord(message, "hey")
+        ) {
+          return pickRandom([
+            "Hello! How are you feeling today?",
+            "Hi there! What's on your mind?",
+            "Hey! Tell me about your day.",
+          ]);
+        }
+        return "";
+      }
+
+      function checkFeeling(message) {
+        if (
+          containsWord(message, "i feel") ||
+          containsWord(message, "i am feeling") ||
+          containsWord(message, "im feeling")
+        ) {
+          let feeling = getAfterKeyword(message, "feel");
+          if (feeling === "") {
+            feeling = getAfterKeyword(message, "feeling");
+          }
+          if (feeling !== "") {
+            return pickRandom([
+              "Why do you feel " + feeling + "?",
+              "How long have you been feeling " + feeling + "?",
+              "What makes you feel " + feeling + "?",
+            ]);
+          }
+          return "Tell me more about how you feel.";
+        }
+        return "";
+      }
+
+      function checkSadness(message) {
+        if (
+          containsWord(message, "sad") ||
+          containsWord(message, "unhappy") ||
+          containsWord(message, "depressed") ||
+          containsWord(message, "down")
+        ) {
+          return pickRandom([
+            "I'm sorry to hear that. What's been making you feel this way?",
+            "That sounds tough. Do you want to talk about it?",
+            "I'm here for you. What happened?",
+          ]);
+        }
+        return "";
+      }
+
+      function checkHappiness(message) {
+        if (
+          containsWord(message, "happy") ||
+          containsWord(message, "great") ||
+          containsWord(message, "good") ||
+          containsWord(message, "wonderful") ||
+          containsWord(message, "awesome")
+        ) {
+          return pickRandom([
+            "That's great to hear! What's making you feel good?",
+            "Wonderful! Tell me more!",
+            "I'm glad you're doing well! What happened?",
+          ]);
+        }
+        return "";
+      }
+
+      function checkFamily(message) {
+        if (
+          containsWord(message, "mother") ||
+          containsWord(message, "father") ||
+          containsWord(message, "parent") ||
+          containsWord(message, "sister") ||
+          containsWord(message, "brother") ||
+          containsWord(message, "family")
+        ) {
+          return pickRandom([
+            "Tell me more about your family.",
+            "How does that make you feel about your family?",
+            "Family can be complicated. Go on...",
+          ]);
+        }
+        return "";
+      }
+
+      function checkSchool(message) {
+        if (
+          containsWord(message, "school") ||
+          containsWord(message, "class") ||
+          containsWord(message, "teacher") ||
+          containsWord(message, "homework") ||
+          containsWord(message, "test") ||
+          containsWord(message, "grade")
+        ) {
+          return pickRandom([
+            "How do you feel about school?",
+            "Tell me more about what's going on at school.",
+            "School can be stressful. What's on your mind?",
+          ]);
+        }
+        return "";
+      }
+
+      function checkQuestion(message) {
+        if (message.trim().endsWith("?")) {
+          return pickRandom([
+            "Why do you ask?",
+            "What do you think the answer is?",
+            "That's an interesting question. What made you think of that?",
+            "Hmm, what would it mean to you if I answered that?",
+          ]);
+        }
+        return "";
+      }
+
+      function checkBecause(message) {
+        if (containsWord(message, "because")) {
+          let reason = getAfterKeyword(message, "because");
+          if (reason !== "") {
+            return pickRandom([
+              'Is that the real reason — "' + reason + '"?',
+              "That's interesting. Are there other reasons?",
+              "I see. And how does that make you feel?",
+            ]);
+          }
+          return "Can you explain why?";
+        }
+        return "";
+      }
+
+      function checkYes(message) {
+        let trimmed = message.trim().toLowerCase();
+        if (trimmed === "yes" || trimmed === "yeah" || trimmed === "yep") {
+          return pickRandom([
+            "You seem sure. Tell me more.",
+            "OK, go on...",
+            "I see. Can you elaborate?",
+          ]);
+        }
+        return "";
+      }
+
+      function checkNo(message) {
+        let trimmed = message.trim().toLowerCase();
+        if (trimmed === "no" || trimmed === "nah" || trimmed === "nope") {
+          return pickRandom([
+            "Why not?",
+            "That's OK. What would you like to talk about?",
+            "Alright. Tell me what's on your mind instead.",
+          ]);
+        }
+        return "";
+      }
+
+      // Get a response to the user's message by trying each checker
+      function getResponse(message) {
+        let response = "";
+
+        response = checkGreeting(message);
+        if (response !== "") return response;
+
+        response = checkFeeling(message);
+        if (response !== "") return response;
+
+        response = checkSadness(message);
+        if (response !== "") return response;
+
+        response = checkHappiness(message);
+        if (response !== "") return response;
+
+        response = checkFamily(message);
+        if (response !== "") return response;
+
+        response = checkSchool(message);
+        if (response !== "") return response;
+
+        response = checkBecause(message);
+        if (response !== "") return response;
+
+        response = checkYes(message);
+        if (response !== "") return response;
+
+        response = checkNo(message);
+        if (response !== "") return response;
+
+        response = checkQuestion(message);
+        if (response !== "") return response;
+
+        // Default responses if nothing matched
+        return pickRandom([
+          "Tell me more about that.",
+          "How does that make you feel?",
+          "Why do you say that?",
+          "Interesting... go on.",
+          "Can you explain what you mean?",
+          "I see. Please continue.",
+        ]);
+      }
+
+      // ============================================================
+      // Main conversation loop
+      // ============================================================
+
+      await ti.output("Hello! I'm Eliza, a simple chatbot.");
+      await ti.output("I'm here to listen. Type anything to start talking.");
+      await ti.output('(Type "bye" to end the conversation.)\n');
+
+      let chatting = true;
+      while (chatting) {
+        let userMessage = await ti.readText();
+
+        // Check for goodbye
+        if (
+          containsWord(userMessage, "bye") ||
+          containsWord(userMessage, "goodbye") ||
+          containsWord(userMessage, "quit") ||
+          containsWord(userMessage, "exit")
+        ) {
+          await ti.output(
+            "eliza: Goodbye! It was nice talking to you. Take care! 👋",
+          );
+          chatting = false;
+        } else {
+          let response = getResponse(userMessage);
+          await ti.output("eliza: " + response);
+        }
+      }
+    </script>
+    <button
+      class="source-toggle"
+      onclick="
+        var p = document.getElementById('source-panel');
+        p.classList.toggle('open');
+        this.textContent = p.classList.contains('open')
+          ? '\u2715 Close'
+          : '\uD83D\uDCC4 View Source';
+      "
+    >
+      📄 View Source
+    </button>
+    <div id="source-panel" class="source-panel">
+      <pre><code class="language-javascript" id="source-code"></code></pre>
+    </div>
+    <a class="back-link" href="index.html">← Back to Demos</a>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>
+      {
+        const codeEl = document.getElementById("source-code");
+        const proxyScript = document.querySelector(
+          'script[type="module"][src*="html-proxy"]',
+        );
+        const sourcePromise = proxyScript
+          ? fetch(proxyScript.src).then((r) => r.text())
+          : fetch(location.pathname)
+              .then((r) => r.text())
+              .then((html) => {
+                const m = html.match(
+                  /<script\s+type="module"\s*>([\s\S]{10,}?)<\/script>/i,
+                );
+                return m ? m[1] : "";
+              });
+        sourcePromise.then((text) => {
+          if (!text) {
+            codeEl.textContent =
+              "// Source not available.";
+            return;
+          }
+          text = text.replace(/^\n/, "").replace(/\n\s*$/, "");
+          const lines = text.split("\n");
+          const indent = Math.min(
+            ...lines
+              .filter((l) => l.trim())
+              .map((l) => l.match(/^\s*/)[0].length),
+          );
+          text = lines.map((l) => l.slice(indent)).join("\n");
+          codeEl.textContent = text;
+          hljs.highlightElement(codeEl);
+        });
+      }
+    </script>
+  </body>
+</html>
