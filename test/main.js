@@ -9,7 +9,7 @@ ti.hideTitle();
 
 ti.shouldStealFocus = true;
 /* M */
-ti.outputAnimationLength = 1nord00;
+ti.outputAnimationLength = 100;
 let keepTheming = true;
 while (keepTheming) {
   let themeChoice = await ti.prompt("Choose a theme");
