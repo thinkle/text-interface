@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Mysterious Library – Text Interface Demo</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css"
+    />
+    <style>
+      body {
+        background: var(--ti-black, #f4f1e8);
+        color: var(--ti-white, #2c2416);
+        margin: 0;
+        min-height: 100vh;
+      }
+      .source-toggle {
+        position: fixed;
+        top: 12px;
+        right: 12px;
+        z-index: 1000;
+        background: rgba(128, 128, 128, 0.15);
+        border: 1px solid rgba(128, 128, 128, 0.25);
+        color: var(--ti-white, #2c2416);
+        padding: 6px 14px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-family: system-ui, sans-serif;
+        backdrop-filter: blur(8px);
+        transition: all 0.2s;
+      }
+      .source-toggle:hover {
+        background: rgba(128, 128, 128, 0.3);
+      }
+      .source-panel {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 999;
+        background: rgba(0, 0, 0, 0.92);
+        backdrop-filter: blur(6px);
+        overflow: auto;
+        padding: 56px 1rem 2rem;
+      }
+      .source-panel.open {
+        display: block;
+      }
+      .source-panel pre {
+        max-width: 820px;
+        margin: 0 auto;
+        border-radius: 10px;
+      }
+      .source-panel pre code {
+        font-size: 14px !important;
+        line-height: 1.5;
+      }
+      .back-link {
+        position: fixed;
+        bottom: 12px;
+        left: 12px;
+        z-index: 1001;
+        color: var(--ti-white, #2c2416);
+        font-size: 13px;
+        font-family: system-ui, sans-serif;
+        text-decoration: none;
+        opacity: 0.5;
+        transition: opacity 0.2s;
+      }
+      .back-link:hover {
+        opacity: 1;
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" id="game-source">
+      // ============================================================
+      // The Mysterious Library
+      // A choose-your-own-adventure story.
+      // Style: branching choices using readChoice, simple variables.
+      // Theme: Typewriter (light mode)
+      // ============================================================
+
+      import {
+        TextInterface,
+        applyTheme,
+        themes,
+      } from "../dist/text-interface.es.js";
+
+      // --- Set up the interface ---
+      applyTheme(themes.typewriter);
+      let app = document.getElementById("app");
+      let ti = new TextInterface(
+        app,
+        "📚 The Mysterious Library",
+        "Choose wisely...",
+        "",
+      );
+      ti.outputAnimationLength = 800;
+      ti.shouldStealFocus = true;
+
+      // --- Introduction ---
+      await ti.output(
+        "You stand before an old stone building at the end of a cobblestone lane.",
+      );
+      await ti.output(
+        'A wooden sign above the door reads: "THE LIBRARY OF FORGOTTEN THINGS."',
+      );
+      await ti.output(
+        "The door creaks open as you approach, as if it has been expecting you.\n",
+      );
+
+      await ti.output(
+        "You step inside. The air smells of old paper and candle wax.",
+      );
+      await ti.output(
+        "Tall shelves stretch in every direction, disappearing into shadow.",
+      );
+      await ti.output("Three paths lie before you.\n");
+
+      let path = await ti.readChoice(
+        [
+          "The Fiction Wing — shelves of leather-bound novels",
+          "The Archives — rows of dusty encyclopedias and maps",
+          "The Locked Door — a heavy iron door with a faint glow beneath it",
+        ],
+        "Where do you go?",
+      );
+
+      // ============================================================
+      // PATH 1: The Fiction Wing
+      // ============================================================
+      if (path === "The Fiction Wing — shelves of leather-bound novels") {
+        await ti.output("\nYou wander into the Fiction Wing.");
+        await ti.output("The books here seem to whisper as you pass by.");
+        await ti.output(
+          "One book on a pedestal catches your eye — its cover shimmers with golden light.",
+        );
+        await ti.output('The title reads: "The Story That Writes Itself."\n');
+
+        let bookChoice = await ti.readChoice(
+          ["Open the book and read it", "Leave it alone — it feels dangerous"],
+          "What do you do?",
+        );
+
+        if (bookChoice === "Open the book and read it") {
+          await ti.output(
+            "\nYou open the book. The pages are blank — then words begin to appear.",
+          );
+          await ti.output(
+            "They describe YOU, standing in the library, reading this very book.",
+          );
+          await ti.output("As you keep reading, the story changes...");
+          await ti.output(
+            "The words describe a version of you who is braver, kinder, and wiser.",
+          );
+          await ti.output(
+            "You close the book. Somehow you feel different — like you just lived a hundred lives.\n",
+          );
+          await ti.output(
+            '🌟 ENDING: "The Reader" — You gained wisdom from a book with no author.',
+          );
+        } else {
+          await ti.output("\nYou back away from the glowing book.");
+          await ti.output(
+            "As you turn to leave, you notice a small note tucked into a shelf.",
+          );
+          await ti.output(
+            'It reads: "Not every story needs to be read. Some just need to exist."',
+          );
+          await ti.output(
+            "You smile, tuck the note into your pocket, and walk back toward the entrance.\n",
+          );
+          await ti.output(
+            '📝 ENDING: "The Cautious One" — Sometimes wisdom is knowing when to walk away.',
+          );
+        }
+      }
+
+      // ============================================================
+      // PATH 2: The Archives
+      // ============================================================
+      if (path === "The Archives — rows of dusty encyclopedias and maps") {
+        await ti.output(
+          "\nYou enter the Archives. The shelves here are old and creaky.",
+        );
+        await ti.output(
+          "Maps hang on the walls — but they show places you have never heard of.",
+        );
+        await ti.output(
+          'One map is labeled: "The Place Where Lost Things Go."\n',
+        );
+
+        let mapChoice = await ti.readChoice(
+          ["Study the map closely", "Search the desks for more clues"],
+          "What do you do?",
+        );
+
+        if (mapChoice === "Study the map closely") {
+          await ti.output(
+            "\nYou lean in. The map seems to shift and move as you watch.",
+          );
+          await ti.output(
+            "Streets rearrange themselves. A red dot appears — labeled with YOUR name.",
+          );
+          await ti.output(
+            "You realize: this map shows where to find things YOU have lost.",
+          );
+          await ti.output(
+            "Memories, old friends, forgotten dreams — they are all marked on this map.",
+          );
+          await ti.output("You carefully roll it up and take it with you.\n");
+          await ti.output(
+            '🗺️ ENDING: "The Cartographer" — You found a map to everything you forgot.',
+          );
+        } else {
+          await ti.output("\nYou rummage through the old wooden desks.");
+          await ti.output(
+            "In a drawer, you find a brass key and a scrap of paper.",
+          );
+          await ti.output(
+            'The paper says: "For the Locked Door. Use only if you are ready."\n',
+          );
+
+          let useKey = await ti.readChoice(
+            [
+              "Go try the key on the Locked Door",
+              "Put it back — you are not ready",
+            ],
+            "What do you do?",
+          );
+
+          if (useKey === "Go try the key on the Locked Door") {
+            await ti.output(
+              "\nYou rush to the iron door and slide the key into the lock.",
+            );
+            await ti.output("It turns with a satisfying CLICK.");
+            await ti.output(
+              "Behind the door is a small room with a single candle and a mirror.",
+            );
+            await ti.output(
+              "In the mirror you see yourself — older, smiling, surrounded by people you love.",
+            );
+            await ti.output(
+              "The image fades. You leave the library knowing the future is bright.\n",
+            );
+            await ti.output(
+              '🔑 ENDING: "The Key Bearer" — You unlocked a door to your own future.',
+            );
+          } else {
+            await ti.output(
+              "\nYou place the key back in the drawer and close it gently.",
+            );
+            await ti.output("Some doors are not meant to be opened today.");
+            await ti.output(
+              "You leave the Archives feeling calm and thoughtful.\n",
+            );
+            await ti.output(
+              '🕊️ ENDING: "The Patient One" — You will be ready someday, and the door will wait.',
+            );
+          }
+        }
+      }
+
+      // ============================================================
+      // PATH 3: The Locked Door
+      // ============================================================
+      if (
+        path ===
+        "The Locked Door — a heavy iron door with a faint glow beneath it"
+      ) {
+        await ti.output(
+          "\nYou approach the iron door. It is cold to the touch.",
+        );
+        await ti.output(
+          "There is no handle, no keyhole — just smooth, dark metal.",
+        );
+        await ti.output(
+          "But the glow underneath pulses gently, like a heartbeat.\n",
+        );
+
+        let doorChoice = await ti.readChoice(
+          [
+            "Knock on the door",
+            "Press your hand flat against it",
+            "Turn back — this feels wrong",
+          ],
+          "What do you do?",
+        );
+
+        if (doorChoice === "Knock on the door") {
+          await ti.output(
+            "\nYou knock three times. The sound echoes through the library.",
+          );
+          await ti.output("Silence...");
+          await ti.output("Then, slowly, the door swings open on its own.");
+          await ti.output(
+            "Inside is a vast, starlit sky — not a room, but an entire world.",
+          );
+          await ti.output("You step through. The door closes behind you.");
+          await ti.output("A new adventure begins.\n");
+          await ti.output(
+            '✨ ENDING: "The Adventurer" — You knocked, and the universe answered.',
+          );
+        } else if (doorChoice === "Press your hand flat against it") {
+          await ti.output("\nYou place your palm on the cold iron.");
+          await ti.output(
+            "Warmth spreads from the door into your hand, up your arm, through your whole body.",
+          );
+          await ti.output(
+            "Images flash through your mind — every book in this library, all at once.",
+          );
+          await ti.output("For one brief moment, you know everything.");
+          await ti.output(
+            "Then it fades — but you are left with a deep sense of peace.\n",
+          );
+          await ti.output(
+            '🧠 ENDING: "The Enlightened" — You touched the door and it shared its secrets.',
+          );
+        } else {
+          await ti.output("\nYou step away from the door.");
+          await ti.output(
+            "As you walk back toward the entrance, you hear a faint whisper behind you.",
+          );
+          await ti.output('"Come back anytime," it says.');
+          await ti.output(
+            "You leave the library and step into the sunlight, blinking.",
+          );
+          await ti.output(
+            "The building is gone when you turn around. Only the cobblestone lane remains.\n",
+          );
+          await ti.output(
+            '🌅 ENDING: "The Dreamer" — Was it real? You will always wonder.',
+          );
+        }
+      }
+
+      // --- Play again ---
+      await ti.output("");
+      let again = await ti.promptYesOrNo(
+        "Would you like to explore the library again?",
+      );
+      if (again) {
+        location.reload();
+      } else {
+        await ti.output(
+          "The library will be here whenever you return. Goodbye. 📚",
+        );
+      }
+    </script>
+    <button
+      class="source-toggle"
+      onclick="
+        var p = document.getElementById('source-panel');
+        p.classList.toggle('open');
+        this.textContent = p.classList.contains('open')
+          ? '\u2715 Close'
+          : '\uD83D\uDCC4 View Source';
+      "
+    >
+      📄 View Source
+    </button>
+    <div id="source-panel" class="source-panel">
+      <pre><code class="language-javascript" id="source-code"></code></pre>
+    </div>
+    <a class="back-link" href="index.html">← Back to Demos</a>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>
+      {
+        const codeEl = document.getElementById("source-code");
+        const proxyScript = document.querySelector(
+          'script[type="module"][src*="html-proxy"]',
+        );
+        const sourcePromise = proxyScript
+          ? fetch(proxyScript.src).then((r) => r.text())
+          : fetch(location.pathname)
+              .then((r) => r.text())
+              .then((html) => {
+                const m = html.match(
+                  /<script\s+type="module"\s*>([\s\S]{10,}?)<\/script>/i,
+                );
+                return m ? m[1] : "";
+              });
+        sourcePromise.then((text) => {
+          if (!text) {
+            codeEl.textContent =
+              "// Source not available.";
+            return;
+          }
+          text = text.replace(/^\n/, "").replace(/\n\s*$/, "");
+          const lines = text.split("\n");
+          const indent = Math.min(
+            ...lines
+              .filter((l) => l.trim())
+              .map((l) => l.match(/^\s*/)[0].length),
+          );
+          text = lines.map((l) => l.slice(indent)).join("\n");
+          codeEl.textContent = text;
+          hljs.highlightElement(codeEl);
+        });
+      }
+    </script>
+  </body>
+</html>
