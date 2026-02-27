@@ -126,7 +126,7 @@ The Text Interface Library is designed to be easily customized through CSS varia
 The library includes several pre-designed themes that you can apply instantly:
 
 ```javascript
-import { applyTheme, themes } from "text-interface/themes";
+import { applyTheme, themes } from "text-interface";
 
 // Apply any built-in theme
 applyTheme(themes.dracula);
@@ -148,15 +148,15 @@ applyTheme(themes.typewriter);
 - `solarizedLight` - Light version of Solarized
 - `monokai` - Classic Sublime Text theme
 - `nord` - Arctic-inspired frost and aurora colors
-- `github` - GitHub's clean light theme
-- `paper` - Minimal paper-like light theme
+- `githubLight` - GitHub's clean light theme
+- `paperLight` - Minimal paper-like light theme
 
 ### Creating Custom Themes
 
 You can create your own themes by defining CSS custom properties:
 
 ```javascript
-import { applyTheme } from "text-interface/themes";
+import { applyTheme } from "text-interface";
 
 const myCustomTheme = `
 :root {
@@ -187,11 +187,11 @@ Below is a comprehensive list of the CSS variables you can override:
 | `--ti-echo-color`                | `#aaa`               | Color for echoed input           |
 | `--ti-input-color`               | `#aaa`               | Color for input text             |
 | `--ti-caret-color`               | `#fefefe`            | Color of the cursor              |
-| `--ti-custom-caret`              | `"█"`                | Character used for custom cursor |
+| `--ti-custom-caret`              | `"\|"`               | Character used for custom cursor |
 | `--ti-custom-caret-shape`        | `block`              | Shape of the cursor when typing  |
-| `--ti-font-size`                 | `1em`                | Base font size                   |
+| `--ti-font-size`                 | `18px`               | Base font size                   |
 | `--ti-max-height`                | `90vh`               | Maximum height of the interface  |
-| `--ti-max-width`                 | `28em`               | Maximum width of the interface   |
+| `--ti-max-width`                 | `58em`               | Maximum width of the interface   |
 | `--ti-min-width`                 | `20em`               | Minimum width of the interface   |
 | `--ti-output-spacing`            | `0.5em`              | Spacing between output lines     |
 | `--ti-input-padding`             | `0`                  | Padding around input area        |
@@ -254,7 +254,7 @@ ti.shouldStealFocus = true; // Automatically focus the input field when reading 
 
 You could limit yourself to just these when teaching at an introductory level.
 
-- **`output(text: string): void`**  
+- **`output(text: string): Promise<void>`**  
   Outputs text to the interface.
 
 - **`setTitle(text: string): void`**  
@@ -271,13 +271,13 @@ You could limit yourself to just these when teaching at an introductory level.
 
 #### Additional outputs
 
-- **`showImage(src: string, alt?: string): void`**  
+- **`showImage(src: string, alt?: string): Promise<void>`**  
   Appends an image to the output area.
 
-- **`showElement(element: HTMLElement): void`**  
+- **`showElement(element: HTMLElement): Promise<void>`**  
   Appends a given element to the output area.
 
-- **`showHTML(arbitraryHTML: string): void`**  
+- **`showHTML(arbitraryHTML: string): Promise<void>`**  
   Appends raw HTML to the output area.
 
 #### Convenience methods:
@@ -352,7 +352,7 @@ const terminal = new TextInterface(
 );
 
 // Apply a terminal theme
-import { applyTheme, themes } from "text-interface/themes";
+import { applyTheme, themes } from "text-interface";
 applyTheme(themes.greenTerminal);
 
 // Configure for terminal behavior

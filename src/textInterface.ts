@@ -124,12 +124,12 @@ export class TextInterface {
     this.div.querySelector(".ti-title")!.textContent = text;
   }
   hideTitle() {
-    this.div.querySelector(".ti-title")!.style.display = "none";
-    this.div.querySelector(".output")!.style.marginTop = "1em";
+    (this.div.querySelector(".ti-title") as HTMLElement).style.display = "none";
+    (this.div.querySelector(".output") as HTMLElement).style.marginTop = "1em";
   }
   showTitle() {
-    this.div.querySelector(".output")!.style.marginTop = "0";
-    this.div.querySelector(".ti-title")!.style.display = "block";
+    (this.div.querySelector(".output") as HTMLElement).style.marginTop = "0";
+    (this.div.querySelector(".ti-title") as HTMLElement).style.display = "block";
   }
 
   clear() {
@@ -170,7 +170,7 @@ export class TextInterface {
   async readYesOrNo(errorMessage = "Say yes or no!"): Promise<boolean> {
     let text = await this.readText();
     text = text.toLowerCase();
-    text = text.replace(/\s+/, "");
+    text = text.replace(/\s+/g, "");
     if (yesWords.indexOf(text) > -1) {
       return true;
     }
@@ -226,7 +226,7 @@ export class TextInterface {
   async readNumberInRange(
     min: number,
     max: number,
-    errorMessage = `Please type a whole number within the range of ${min} and ${max}`
+    errorMessage = `Please type a number within the range of ${min} and ${max}`
   ): Promise<number> {
     let text = await this.readText();
     let number = Number(text);
@@ -394,7 +394,7 @@ export class TextInterface {
       if (isEnter) {
         let input = this!.inputEl!.textContent!.replace(/\n$/, "");
         let outputText = this.promptString
-          ? this.promptString + " " + input
+          ? this.promptString + (this.promptString.endsWith(" ") ? "" : " ") + input
           : input;
         this.output(outputText, true);
         if (this.listener) {
