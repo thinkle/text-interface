@@ -396,7 +396,7 @@ describe("TextInterface", () => {
       expect(outputText).not.toContain("whole number");
       simulateInput("5");
       await flush();
-      await promise;
+      expect(await promise).toBe(5);
     });
 
     it("accepts boundary values", async () => {
